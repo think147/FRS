@@ -578,67 +578,71 @@ app.get('/api/users/:id/qr', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
-const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
+// ── Vercel serverless export ──────────────────────────────────────────────────
+// When deployed on Vercel, we just export the app; Vercel handles HTTPS/ports.
+// When running locally (npm start), we spin up the regular HTTP + HTTPS servers.
+module.exports = app;
 
-// HTTP server: redirect to HTTPS for LAN/external, keep as-is only for localhost (camera works there)
-const httpApp = express();
-httpApp.use((req, res) => {
-  const host = req.hostname;
-  const isLocal = host === 'localhost' || host === '127.0.0.1';
-  if (!isLocal) {
-    const httpsUrl = `https://${host}:${HTTPS_PORT}${req.url}`;
-    return res.redirect(302, httpsUrl);
-  }
-  app(req, res);
-});
-http.createServer(httpApp).listen(PORT, () => {
-  console.log(`HTTP  server -> http://localhost:${PORT}  (redirects to HTTPS for LAN)`);
-});
+if (require.main === module) {
+  // ── Local dev: HTTP + HTTPS servers ────────────────────────────────────────
+  const PORT       = process.env.PORT       || 3000;
+  const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
 
-
-// Start HTTPS server with self-signed cert (required for camera on LAN/public IP)
-(async () => {
-  try {
-    const certDir = path.join(ROOT, 'certs');
-    const certFile = path.join(certDir, 'cert.pem');
-    const keyFile  = path.join(certDir, 'key.pem');
-
-    if (!fs.existsSync(certDir)) fs.mkdirSync(certDir, { recursive: true });
-
-    let sslCert, sslKey;
-    if (fs.existsSync(certFile) && fs.existsSync(keyFile)) {
-      sslCert = fs.readFileSync(certFile, 'utf8');
-      sslKey  = fs.readFileSync(keyFile, 'utf8');
-      console.log('Loaded existing SSL certificate.');
-    } else {
-      console.log('Generating self-signed SSL certificate...');
-      const attrs = [{ name: 'commonName', value: 'rfid-kiosk' }];
-      const pems  = await selfsigned.generate(attrs, {
-        keySize: 2048,
-        days: 825,
-        algorithm: 'sha256',
-        extensions: [
-          { name: 'subjectAltName', altNames: [
-            { type: 2, value: 'localhost' },
-            { type: 7, ip: '127.0.0.1' }
-          ]}
-        ]
-      });
-      sslCert = pems.cert;
-      sslKey  = pems.private;
-      fs.writeFileSync(certFile, sslCert);
-      fs.writeFileSync(keyFile, sslKey);
-      console.log('Self-signed SSL certificate saved to ./certs/');
+  // HTTP: redirect non-localhost to HTTPS, serve directly on localhost
+  const httpApp = express();
+  httpApp.use((req, res) => {
+    const host    = req.hostname;
+    const isLocal = host === 'localhost' || host === '127.0.0.1';
+    if (!isLocal) {
+      return res.redirect(302, `https://${host}:${HTTPS_PORT}${req.url}`);
     }
+    app(req, res);
+  });
+  http.createServer(httpApp).listen(PORT, () => {
+    console.log(`HTTP  server -> http://localhost:${PORT}  (redirects to HTTPS for LAN)`);
+  });
 
-    https.createServer({ key: sslKey, cert: sslCert }, app).listen(HTTPS_PORT, () => {
-      console.log(`HTTPS server -> https://localhost:${HTTPS_PORT}`);
-      console.log(`HTTPS server -> https://10.117.10.10:${HTTPS_PORT}  (LAN)`);
-      console.log('NOTE: On first visit, accept the self-signed certificate warning in your browser.');
-    });
-  } catch (err) {
-    console.warn('HTTPS server could not start:', err.message);
-  }
-})();
+  // HTTPS: self-signed cert for camera access on LAN/public IP
+  (async () => {
+    try {
+      const certDir  = path.join(ROOT, 'certs');
+      const certFile = path.join(certDir, 'cert.pem');
+      const keyFile  = path.join(certDir, 'key.pem');
+
+      if (!fs.existsSync(certDir)) fs.mkdirSync(certDir, { recursive: true });
+
+      let sslCert, sslKey;
+      if (fs.existsSync(certFile) && fs.existsSync(keyFile)) {
+        sslCert = fs.readFileSync(certFile, 'utf8');
+        sslKey  = fs.readFileSync(keyFile,  'utf8');
+        console.log('Loaded existing SSL certificate.');
+      } else {
+        console.log('Generating self-signed SSL certificate...');
+        const attrs = [{ name: 'commonName', value: 'rfid-kiosk' }];
+        const pems  = await selfsigned.generate(attrs, {
+          keySize: 2048,
+          days:    825,
+          algorithm: 'sha256',
+          extensions: [{ name: 'subjectAltName', altNames: [
+            { type: 2, value: 'localhost' },
+            { type: 7, ip: '127.0.0.1'   }
+          ]}]
+        });
+        sslCert = pems.cert;
+        sslKey  = pems.private;
+        fs.writeFileSync(certFile, sslCert);
+        fs.writeFileSync(keyFile,  sslKey);
+        console.log('Self-signed SSL certificate saved to ./certs/');
+      }
+
+      https.createServer({ key: sslKey, cert: sslCert }, app).listen(HTTPS_PORT, () => {
+        console.log(`HTTPS server -> https://localhost:${HTTPS_PORT}`);
+        console.log(`HTTPS server -> https://10.117.10.10:${HTTPS_PORT}  (LAN)`);
+        console.log('NOTE: On first visit, accept the self-signed certificate warning in your browser.');
+      });
+    } catch (err) {
+      console.warn('HTTPS server could not start:', err.message);
+    }
+  })();
+}
 
