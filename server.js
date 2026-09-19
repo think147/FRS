@@ -11,19 +11,21 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const PDFDocument = require('pdfkit');
 const cors = require('cors');
-const selfsigned = require('selfsigned');
 
 const app = express();
 const ROOT = path.resolve(__dirname);
-const DATA_DIR = path.join(ROOT, 'data');
-const UPLOADS_DIR = path.join(ROOT, 'uploads');
-const USERS_FILE = path.join(DATA_DIR, 'users.json');
-const ATT_FILE = path.join(DATA_DIR, 'attendance.json');
 
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+// On Vercel only /tmp is writable; locally use the project data/uploads dirs
+const IS_VERCEL  = !!process.env.VERCEL;
+const DATA_DIR   = IS_VERCEL ? '/tmp/data'    : path.join(ROOT, 'data');
+const UPLOADS_DIR = IS_VERCEL ? '/tmp/uploads' : path.join(ROOT, 'uploads');
+const USERS_FILE = path.join(DATA_DIR, 'users.json');
+const ATT_FILE   = path.join(DATA_DIR, 'attendance.json');
+
+if (!fs.existsSync(DATA_DIR))   fs.mkdirSync(DATA_DIR,    { recursive: true });
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]');
-if (!fs.existsSync(ATT_FILE)) fs.writeFileSync(ATT_FILE, '[]');
+if (!fs.existsSync(ATT_FILE))   fs.writeFileSync(ATT_FILE,   '[]');
 
 app.use(cors());
 
@@ -585,6 +587,7 @@ module.exports = app;
 
 if (require.main === module) {
   // ── Local dev: HTTP + HTTPS servers ────────────────────────────────────────
+  const selfsigned = require('selfsigned');
   const PORT       = process.env.PORT       || 3000;
   const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
 
