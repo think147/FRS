@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin - Upload</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card hero-card">
+      <div class="hero-content" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h1>AI Attendance System</h1>
+          <p>Smart backend dashboard for user registration, image enrollment, and attendance reporting.</p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center; margin-left: 16px;">
+          <a href="/" style="text-decoration: none; color: #fff; background: rgba(255,255,255,0.18); padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 14px; border: 1px solid rgba(255,255,255,0.3);">Kiosk Mode</a>
+          <button id="logoutBtn" class="secondary" style="display:none;">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card login-card" id="loginCard">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <label>Username<input name="username" type="text" value="admin"></label>
+        <label>Password<input name="password" type="password" value="password123"></label>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:16px; display:none" id="uploadCard">
+      <h2>Register Employee</h2>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <div class="form-row">
+          <label>Name<input name="name" type="text" placeholder="Full Name" required></label>
+          <label>Designation<input name="designation" id="designationInput" type="text" placeholder="e.g. IT, Sales, Management" required></label>
+        </div>
+        <div class="form-row">
+          <label>Unique Code<input name="code" type="text" required placeholder="Employee ID or code"></label>
+          <label>Section<input name="section" id="sectionInput" type="text" placeholder="Auto-assigned from Designation if empty"></label>
+        </div>
+        <label>Upload 4 Face Images (different angles)<input id="faceFileInput" name="faces" type="file" accept="image/*" multiple></label>
+        <div class="small">Upload 4 images first, then press Save to enroll the user and enable frontend face matching.</div>
+        <div class="capture-actions">
+          <button id="openCameraBtn" type="button" class="secondary">Open Camera to Capture</button>
+          <span id="captureCount" class="small">0 / 4 captured</span>
+        </div>
+        <div id="capturePreview" class="capture-preview"></div>
+        <div id="cameraCapture" class="camera-capture" style="display:none">
+          <video id="cameraVideo" autoplay playsinline muted></video>
+          <div class="camera-controls">
+            <button id="takePhotoBtn" type="button">Capture Photo</button>
+            <button id="closeCameraBtn" type="button" class="secondary">Close Camera</button>
+          </div>
+        </div>
+        <button type="submit" class="primary">Save User & Generate QR</button>
+      </form>
+      <div id="qrContainer" class="qr-panel"></div>
+      <hr />
+      <div class="registered-users-header">
+        <div class="header-left">
+          <h3>Registered Users</h3>
+          <span class="tag">Grouped by section</span>
+        </div>
+        <div class="users-actions-bar" id="usersActionsBar">
+          <label class="select-all-label" title="Select or deselect all users">
+            <input type="checkbox" id="selectAllUsersCb">
+            <span>Select All (<span id="userCountBadge">0</span>)</span>
+          </label>
+          <button id="deleteSelectedBtn" type="button" class="btn-danger-outline" style="display:none;" title="Delete selected users">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            Delete Selected (<span id="selectedCount">0</span>)
+          </button>
+        </div>
+      </div>
+      <div id="usersList"></div>
+      <hr />
+      <h3>Attendance Reports</h3>
+      <div class="card report-card">
+        <label>Date: <input type="date" id="reportDate" value=""></label>
+        <div class="report-actions">
+          <button id="loadReportBtn">Load Report</button>
+          <button id="exportCsvBtn">Download CSV</button>
+          <button id="exportXlsxBtn">Download XLSX</button>
+          <button id="exportPdfBtn">Download PDF</button>
+        </div>
+        <div id="reportContainer" class="report-container"></div>
+      </div>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>

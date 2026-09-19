@@ -1,0 +1,24 @@
+{
+  "name": "rfid-kiosk",
+  "version": "1.0.0",
+  "description": "Kiosk app: admin upload, QR generation, frontend scan and display",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "healthcheck": "node scripts/healthcheck.js --url http://localhost:3000 --path /api/admin/session --retries 3 --timeout 5000",
+    "healthcheck:loop": "node scripts/healthcheck.js --url http://localhost:3000 --path /api/admin/session --interval 60000 --retries 3 --timeout 5000"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "html5-qrcode": "^2.3.8",
+    "jimp": "^0.16.1",
+    "multer": "^1.4.5-lts.1",
+    "pdfkit": "^0.14.0",
+    "qrcode": "^1.5.1",
+    "selfsigned": "^5.5.0"
+  }
+}

@@ -1,0 +1,95 @@
+[
+  {
+    "id": "1789368563383",
+    "name": "RANA SHIVAM KUMAR",
+    "email": "",
+    "designation": "IT ",
+    "code": "101",
+    "section": "IT",
+    "images": [
+      "/uploads/faces-1789368563378-605300118.jpeg",
+      "/uploads/faces-1789368563378-598546733.jpg",
+      "/uploads/faces-1789368563379-94523085.jpg",
+      "/uploads/faces-1789368563379-928705624.jpg",
+      "/uploads/faces-1789368563382-370667657.jpg"
+    ],
+    "faceHashes": [
+      "d6dd318f0eb2ca7a30a25e4794fba26bcd273241",
+      "b905e3b8bdd915c8c114a853dcc7f23b4914c2c6",
+      "27f44aca8519253eaa0c0b795acc024630a2ee9a",
+      "f15252cfee4e26c324abbdc13b918a7dc3dbc510",
+      "218b3cb42707456cd92de56601cffad342e45a82"
+    ],
+    "imageAHashes": [
+      "ffe7e7e700203c18",
+      "3f3f3f7f73270702",
+      "3f3f7f7f73330302",
+      "3f3f3f7f33270702",
+      "3f3f3f7f27270702"
+    ],
+    "createdAt": "2026-09-14T06:49:23.383Z",
+    "image": "/uploads/faces-1789368563378-605300118.jpeg"
+  },
+  {
+    "id": "1789369778726",
+    "name": "Amit Ranjan",
+    "email": "",
+    "designation": "IT ",
+    "code": "1001",
+    "section": "IT",
+    "images": [
+      "/uploads/faces-1789369778722-281005501.jpeg",
+      "/uploads/faces-1789369778725-388062077.jpg",
+      "/uploads/faces-1789369778725-523347214.jpg",
+      "/uploads/faces-1789369778725-896278264.jpg",
+      "/uploads/faces-1789369778725-439693220.jpg"
+    ],
+    "faceHashes": [
+      "61d6760578187ad008ac682664646586c4d3867b",
+      "a4858309a9e0d83fadf7ff4b42f81c1685d4d4ca",
+      "7f31189e9a7a19d053adbedb2f01df37dafec616",
+      "f19d5f12a39d8e0dd692231483b631e3a9686b9e",
+      "3537206902a414e9069b7705c361af603e49625f"
+    ],
+    "imageAHashes": [
+      "f7c3c3c3e3c7e7e7",
+      "0707030d0f0f0f06",
+      "070f0f0f07070700",
+      "07070f0f07070700",
+      "0303030f1f1d1c0c"
+    ],
+    "createdAt": "2026-09-14T07:09:38.726Z",
+    "image": "/uploads/faces-1789369778722-281005501.jpeg"
+  },
+  {
+    "id": "1789536041089",
+    "name": "RANA SHIVAM KUMAR",
+    "email": "",
+    "designation": "IT ",
+    "code": "102",
+    "section": "IT",
+    "images": [
+      "/uploads/faces-1789536041081-351315160.jpeg",
+      "/uploads/faces-1789536041084-84107491.jpg",
+      "/uploads/faces-1789536041085-586032492.jpg",
+      "/uploads/faces-1789536041085-980946120.jpg",
+      "/uploads/faces-1789536041085-324214369.jpg"
+    ],
+    "faceHashes": [
+      "d6dd318f0eb2ca7a30a25e4794fba26bcd273241",
+      "fa118130fd4368dc4f108e5384bca824138d4ee7",
+      "f5138fafe3574960cd95ed6402300b502df4803c",
+      "c6dc18afc769464191f6d8176f6056a89fbd79d6",
+      "f75c9165502ae7f929922d21a89d0a18b18613fd"
+    ],
+    "imageAHashes": [
+      "ffe7e7e700203c18",
+      "1f3f3f3f37370704",
+      "1f3f3f3f37370704",
+      "1f3f3f3f37270704",
+      "1f3f3f3f37270704"
+    ],
+    "createdAt": "2026-09-16T05:20:41.089Z",
+    "image": "/uploads/faces-1789536041081-351315160.jpeg"
+  }
+]
